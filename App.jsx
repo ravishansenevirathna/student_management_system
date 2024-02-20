@@ -1,20 +1,27 @@
-import MainPage from './pages/StudentMS/MainPage/MainPage'
 import Register from './pages/StudentMS/Register/Register'
-import StudentAction from './pages/StudentMS/Action/StudentAction'
 import StudentLogin from './pages/StudentMS/Login/StudentLogin'
-import Axios from './pages/axios/Axios'
-import UpdateStudent from './pages/StudentMS/MainPage/UpdateStudent'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import DrawerNav from './pages/component/DrawerNav/DrawerNav';
+import UpdateStudent from './pages/StudentMS/MainPage/UpdateStudent';
+
+
+const Stack = createStackNavigator();
+
 
 export default function App() {
 
 
   return (
 
-    // <Axios />
-    <Register/>
-  // <StudentLogin/>
-  // <StudentAction/>
-  //  <MainPage/>
-  // <UpdateStudent/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={StudentLogin} />
+        <Stack.Screen name="DrawerNav" component={DrawerNav} options={{headerShown: false}}/>
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Update" component={UpdateStudent} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }

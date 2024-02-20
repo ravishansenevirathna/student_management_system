@@ -1,7 +1,12 @@
 import { View } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, TextInput } from "react-native-paper";
 import { Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import instance from "../AxiosOrder/AxiosOrder";
+
+
+
 
 export default function UpdateStudent(){
 
@@ -27,10 +32,6 @@ export default function UpdateStudent(){
         });
 
     }
-
-
-
-
 
     return(
         <View>

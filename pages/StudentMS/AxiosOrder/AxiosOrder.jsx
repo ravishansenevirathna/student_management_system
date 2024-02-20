@@ -29,14 +29,13 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async config => {
-    if (!cachedToken) {
-      try {
-        const token = await AsyncStorage.getItem('stmToken');
-        cachedToken = token;
-        config.headers.Authorization = `Bearer ${cachedToken}`;
-      } catch (error) {
-        // Handle AsyncStorage errors
-      }
+    try {
+      const token = await AsyncStorage.getItem('stmToken');
+      cachedToken = token;
+      config.headers.Authorization = `Bearer ${cachedToken}`;
+      console.log("Token " + cachedToken);
+    } catch (error) {
+      // Handle AsyncStorage errors
     }
     return config;
   },

@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Avatar,IconButton } from 'react-native-paper';
 
 
-export default function MainPage() {
+export default function MainPage({navigation}) {
 
     const [data, setData] = useState([]);
 
@@ -23,11 +23,11 @@ export default function MainPage() {
     }, []);
 
     const getalldata = () => {
-        console.log("Token " + AsyncStorage.getItem("stmToken"));
+        // console.log("Token " + AsyncStorage.getItem("stmToken"));
         instance.get('/student/getAll')
             .then(function (response) {
                 setData(response.data)
-                console.log(response.data)
+                console.log("data "+response.data)
                 setLoading(false);
             })
             .catch(function (error) {
@@ -37,6 +37,7 @@ export default function MainPage() {
     }
 
     const updateStudent = () => {
+        navigation.navigate('Update')
         console.log("Updated");
     }
 
@@ -110,9 +111,14 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     btnlogout:{
-        borderRadius: 5, 
-        height: 40, // Adjust height
-        margin:5
+        borderRadius: 10, 
+        justifyContent:'left',
+        width:'200',
+        height:'20'
+
+
+
+        
     
      
     }

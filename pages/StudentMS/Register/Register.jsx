@@ -15,7 +15,7 @@ import {
   } from 'react-native';
 
 
-export default function Register(){
+export default function Register({navigation}){
     const [name, setName] = React.useState("");
     const [mail, setMail] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -48,6 +48,7 @@ export default function Register(){
 
     const back = () => {
         console.log("back");
+        navigation.navigate('Login')
     }
 
     return (
@@ -117,15 +118,21 @@ const styles = StyleSheet.create({
     regi:{
         height:40,
         justifyContent: 'center',
+        marginBottom:'10%',
+        marginTop:'10%',
+        color:'blue',
+       
+        
+
 
     },
     container: {
         flex: 1,
-      },
-      inner: {
+    },
+    inner: {
         padding: 24,
         flex: 1,
         justifyContent: 'space-around',
-      },
-  
+    },
+
   }); 

@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import instance from '../AxiosOrder/AxiosOrder';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from 'react-native'
 
 
 
@@ -16,25 +17,78 @@ export default function StudentAction() {
     const [age, setAge] = React.useState("");
     const [contact, setContact] = React.useState("");
 
-    const saveStudent = () => {
-        console.log("Token " + AsyncStorage.getItem("stmToken"));
+    // const saveStudent = () => {
+    //     console.log("Token " + AsyncStorage.getItem("stmToken"));
+    //     if(age >100 || name.length==0 || address.length==0 || contact<11){
+    //         Alert.alert("Warning!","Please enter valid Detail.")
+    //     }
+    //     else{
 
-        instance.post('/student/save', {
-            student_name: name,
-            student_age: age,
-            student_address: address,
-            student_contact: contact
-        })
-            .then(function (response) {
-                console.log("saved!");
-                console.log(response.data);
+    //         instance.post('/student/save', {
+            
+    //         student_name: name,
+    //         student_age: age,
+    //         student_address: address,
+    //         student_contact: contact
+    //     })
+    //         .then(function (response) {
+    //             console.log("saved!");
+    //             console.log(response.data);
                 
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
 
-    }
+    //     }
+
+    // }
+
+    const saveStudent = () => {
+       
+      
+        // Validate data and create error messages if necessary
+        let errorMessages = [];
+      
+        if (age > 100) {
+          errorMessages.push("Enter your Age Correctly.");
+        }
+      
+        if (name.length === 0) {
+          errorMessages.push("Please Enter Your Name.");
+        }
+      
+        if (address.length === 0) {
+          errorMessages.push("Please Enter your Address.");
+        }
+      
+        if (contact.length !== 10 || isNaN(Number(contact))) {
+          errorMessages.push("Invalid Contact Number");
+        }
+      
+        // Check if errors exist and display an alert with specific messages
+        if (errorMessages.length > 0) {
+          const errorMessage = errorMessages.join("\n"); // Combine error messages for readability
+          Alert.alert("Warning!", errorMessage);
+          return; // Prevent API call if there are errors
+        }
+      
+        // If validation passes, proceed with the API call
+        instance.post('/student/save', {
+          student_name: name,
+          student_age: age,
+          student_address: address,
+          student_contact: contact
+        })
+        .then((response) => {
+          console.log("saved!");
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("Error saving student:", error);
+          Alert.alert("Error:", "An error occurred while saving the student.");
+        });
+      };
 
     const clear = () => {
         console.log("cleard");

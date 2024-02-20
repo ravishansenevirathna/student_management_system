@@ -7,25 +7,29 @@ import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import instance from '../AxiosOrder/AxiosOrder';
 
-export default function StudentLogin() {
+export default function StudentLogin({ navigation }) {
 
-    const [mail, setMail] = React.useState("");
-    const [password, setPassword] = React.useState("");
+    const [mail, setMail] = React.useState("batman@gmail.com");
+    const [password, setPassword] = React.useState("batman");
 
-    const signIn = () => {
-        instance.post('/login', {
-            email: mail,
-            password: password
-        })
-            .then(function (response) {
+    const signIn = async () => {
+        const response = await instance.post('/login', { email: mail, password: password });
+        const data = response.data;
+        const result = await AsyncStorage.setItem('stmToken', data.token)
+        const token = await AsyncStorage.getItem('stmToken')
+        navigation.navigate('DrawerNav')
+        // .then(function (response) {
+        //     AsyncStorage.setItem('stmToken', response.data.token)
+        //     // navigation.navigate('DrawerNav')
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
 
-                AsyncStorage.setItem('stmToken', response.data.token);
-                console.log(response.data);
-                console.log("success");
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+    }
+
+    const register = () => {
+        navigation.navigate('Register')
 
     }
 
@@ -53,6 +57,10 @@ export default function StudentLogin() {
 
             <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={signIn}>
                 SignIn
+            </Button>
+
+            <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={register}>
+                Register
             </Button>
 
 
