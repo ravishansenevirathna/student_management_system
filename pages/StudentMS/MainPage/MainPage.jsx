@@ -16,6 +16,7 @@ export default function MainPage({navigation}) {
     const [data, setData] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    
 
     useEffect(() => {
         getalldata();
@@ -36,19 +37,35 @@ export default function MainPage({navigation}) {
             })
     }
 
-    const updateStudent = () => {
-        navigation.navigate('Update')
-        console.log("Updated");
-    }
 
-    const deleteStudent = () => {
-        console.log("Delete");
-    }
+    const navigateToUpdate = (studentId) => {
+        const studentData = data.find((item) => item.id === studentId);
+        navigation.navigate('Update', { selectedStudent: studentData })
+        // .then(response => {
+        //     getalldata();
 
+        // })
+      };
     
-    const logOutStudent = () => {
-        console.log("logOut Sucessfully");
-    }
+
+    const deleteStudent = (studentId) => {
+        const studentData = data.find((item) => item.id === studentId);
+        navigation.navigate('Delete', { selectedStudent: studentData });
+        
+    };
+
+
+    const logOutStudent = async () => {
+        try {
+          await AsyncStorage.removeItem('stmToken'); // Remove your token from storage
+          console.log('Token removed successfully.');
+          // Optionally, navigate to a login screen or reset navigation stack
+          navigation.navigate('Login'); // Assuming you have a 'Login' screen
+        } catch (error) {
+          console.error('Error removing token:', error);
+          // Handle error appropriately, e.g., display an error message
+        }
+      };
 
 
     const MyCard = ({ id, student_name, student_age, student_address, student_contact }) => (
@@ -71,11 +88,11 @@ export default function MainPage({navigation}) {
                     <Text variant="titleLarge">{student_name + ' your address is : ' + student_address}</Text>
                     <Text variant="titleLarge">{student_name + ' your contact is : ' + student_contact}</Text>
 
-                    <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={updateStudent}>
+                    <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={() => navigateToUpdate(id)}>
                         Update
                     </Button>
 
-                    <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={deleteStudent}>
+                    <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={() => deleteStudent(id)}>
                         Delete
                     </Button>
 
@@ -99,6 +116,8 @@ export default function MainPage({navigation}) {
                     data={data}
                     renderItem={({ item }) => <MyCard id={item.id} student_name={item.student_name} student_age={item.student_age} student_address={item.student_address} student_contact={item.student_contact} />}
                     keyExtractor={item => item.id}
+                    
+
                 />
             </View>)}
         </View>
@@ -115,10 +134,6 @@ const styles = StyleSheet.create({
         justifyContent:'left',
         width:'200',
         height:'20'
-
-
-
-        
     
      
     }

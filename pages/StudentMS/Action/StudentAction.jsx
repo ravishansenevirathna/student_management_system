@@ -62,7 +62,7 @@ export default function StudentAction() {
           errorMessages.push("Please Enter your Address.");
         }
       
-        if (contact.length !== 10 || isNaN(Number(contact))) {
+        if (contact.length !== 10) {
           errorMessages.push("Invalid Contact Number");
         }
       

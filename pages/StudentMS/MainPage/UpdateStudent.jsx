@@ -2,21 +2,35 @@ import { View } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 import { Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import instance from "../AxiosOrder/AxiosOrder";
 
 
 
 
-export default function UpdateStudent(){
 
-    const [name, setName] = React.useState("");
-    const [address, setAddress] = React.useState("");
-    const [age, setAge] = React.useState("");
-    const [contact, setContact] = React.useState("");
+export default function UpdateStudent({ route },{navigation}){
+
+    const { selectedStudent } = route.params;
+    const studentId = selectedStudent.id;
+
+    const [name, setName] = useState(selectedStudent?.student_name || "");
+    const [age, setAge] = useState(selectedStudent?.student_age || "");
+    const [address, setAddress] = useState(selectedStudent?.student_address || "");
+    const [contact, setContact] = useState(selectedStudent?.student_contact || "");
+
+    useEffect(() => {
+       
+        if (selectedStudent) {
+          setName(selectedStudent.student_name);
+          setAge( selectedStudent.student_age.toString());
+          setAddress(selectedStudent.student_address);
+          setContact(selectedStudent.student_contact);
+        }
+      }, [selectedStudent]);
 
     const updateStudent = () => {
-    instance.put(`/student/update/${updateData.id}`, {
+    instance.put(`/student/update/${studentId}`, {
         student_name: name,
         student_age: age,
         student_address: address,
@@ -25,12 +39,28 @@ export default function UpdateStudent(){
         .then(function (response) {
             console.log(response.data);
             console.log("updated!");
-            
         })
         .catch(function (error) {
             console.log(error);
         });
 
+    }
+
+    const back = () => {
+        navigation.navigate('DrawerNav');
+
+
+        // instance.get('/student/getAll')
+        //     .then(function (response) {
+        //         setData(response.data)
+        //         console.log("data "+response.data)
+        //         setLoading(false);
+        //         navigation.navigate('DrawerNav');
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //         setLoading(true);
+        //     })
     }
 
     return(
@@ -55,7 +85,7 @@ export default function UpdateStudent(){
                 mode="outlined"
                 label="Enter Your New Age"
                 value={age}
-                onChangeText={age => setAge(age)}
+                onChangeText={age => setAge(age.toString())}
             />
             <TextInput
                 style={styles.txt}
@@ -67,6 +97,12 @@ export default function UpdateStudent(){
             <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={updateStudent}>
                 Update
             </Button>
+
+            <Button buttonColor="black" style={styles.btn1} mode="contained" onPress={back}>
+                Back
+            </Button>
+
+
 
 
         </View>
